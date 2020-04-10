@@ -33,12 +33,12 @@ double benchmark(int size, int argc, char* argv[]){
 
 int main(int argc, char * argv[]){
 int size = 1;
-double benchmark;
+double time;
 for(int i = 0 ; i < MAX_POWER ; i++){
 	size *= 10;
 	for(int j = 0; j < SAMPLE_SIZE ; j++){
-		benchmark = benchmark(size, argc, argv);
-		printf("%d %d %lf\n", j, size, benchmark);
+		time = benchmark(size, argc, argv);
+		printf("%d %d %lf\n", j, size, time);
 	}
 }
 return 0;
