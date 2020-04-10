@@ -7,7 +7,7 @@
 #define SAMPLE_SIZE 30
 
 double benchmark(int size){
-	char[] token = char[size];
+	char token[] = char[size];
 	double startTime;
 	double endTime;
 	double executionTime;
