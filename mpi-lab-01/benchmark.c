@@ -6,13 +6,13 @@
 #define MAX_POWER 7
 #define SAMPLE_SIZE 30
 
-double benchmark(CHAR size){
+double benchmark(int size){
 	char[] token = char[size];
 	double startTime;
 	double endTime;
 	double executionTime;
-	CHAR numProcesses = 2;
-	CHAR myRank;
+	int numProcesses = 2;
+	int myRank;
 	MPI_Comm_size(MPI_COMM_WORLD, &numProcesses);
 	MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
 	
@@ -29,15 +29,15 @@ double benchmark(CHAR size){
 	return executionTime;
 }
 
-CHAR main(CHAR argc, char * argv[]){
-	CHAR size = 1;
+int main(int argc, char * argv[]){
+	int size = 1;
 	double time;
 	MPI_Init(&argc, &argv);
-	for(CHAR i = 0 ; i < MAX_POWER ; i++){
+	for(int i = 0 ; i < MAX_POWER ; i++){
 		size *= 10;
-		for(CHAR j = 0; j < SAMPLE_SIZE ; j++){
+		for(int j = 0; j < SAMPLE_SIZE ; j++){
 			time = benchmark(size);
-			prCHARf("%d %d %lf\n", j, size, time);
+			printf("%d %d %lf\n", j, size, time);
 		}
 	}
 	MPI_Finalize();
