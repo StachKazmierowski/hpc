@@ -18,11 +18,11 @@ double benchmark(int size){
 	
 	startTime = MPI_Wtime();
 	if(myRank == 0){
-		MPI_Send(&token, size, MPI_BYTE, 1, 0, MPI_COMM_WORLD);
-		MPI_Recv(&token, size, MPI_BYTE, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		MPI_Send(&token, 1, MPI_INT, 1, 0, MPI_COMM_WORLD);
+		MPI_Recv(&token, 1, MPI_INT, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	} else {
-		MPI_Recv(&token, size, MPI_BYTE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		MPI_Send(&token, size, MPI_BYTE, 0, 0, MPI_COMM_WORLD);
+		MPI_Recv(&token, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		MPI_Send(&token, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 	}
 	endTime = MPI_Wtime();
 	executionTime = endTime - startTime;
