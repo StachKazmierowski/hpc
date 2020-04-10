@@ -7,7 +7,7 @@
 #define SAMPLE_SIZE 30
 
 double benchmark(int size){
-	int token;
+	int* token;
 	double startTime;
 	double endTime;
 	double executionTime;
