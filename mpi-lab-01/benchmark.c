@@ -19,11 +19,11 @@ double benchmark(int size, int argc, char* argv[]){
 	
 	startTime = MPI_Wtime();
 	if(myRank == 0){
-		MPI_Send(&token, size, MPI_INT, (myRank + 1) % numProcesses , 0, MPI_COMM_WORLD);
-		MPI_Recv(&token, size, MPI_INT, numProcesses - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		MPI_Send(&token, size, MPI_BYTE, 1, 0, MPI_COMM_WORLD);
+		MPI_Recv(&token, size, MPI_BYTE, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	} else {
-		MPI_Recv(&token, size, MPI_INT, myRank - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		MPI_Send(&token, size, MPI_INT, (myRank + 1) % numProcesses , 0, MPI_COMM_WORLD);
+		MPI_Recv(&token, size, MPI_BYTE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		MPI_Send(&token, size, MPI_BYTE, 0, 0, MPI_COMM_WORLD);
 	}
 	endTime = MPI_Wtime();
 	executionTime = endTime - startTime;
