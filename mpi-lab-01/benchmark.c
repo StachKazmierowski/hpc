@@ -37,12 +37,12 @@ int main(int argc, char * argv[]){
     void* buff = malloc(max_payload);
     
     if(node == 0){	
-		for(int i = 0 ; i < max_payload ; i *= 10){
+		for(int i = 1 ; i < max_payload ; i *= 10){
             MPI_Recv(buff, i, MPI_BYTE, partnerRank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             MPI_Send(buff, i, MPI_BYTE, partnerRank, 0, MPI_COMM_WORLD);
 		}
 	} else {
-		for(int i = 0 ; i < max_payload ; i *= 10){
+		for(int i = 1 ; i < max_payload ; i *= 10){
 			double benchmarkTime = benchmark(buff, partnerRank, i);
 			printf("%d %d %lf\n", partnerRank, i, benchmarkTime);
 		}
