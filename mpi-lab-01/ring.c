@@ -19,15 +19,15 @@ int main(int argc, char * argv[])
 		token = 1;
 		MPI_Send(&token, 1, MPI_LONG, (myRank + 1) % numProcesses , 0, MPI_COMM_WORLD);
 		MPI_Recv(&token, 1, MPI_LONG, numProcesses - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		printf("MASTER received token %d form process %d\n", token, numProcesses - 1);
+		printf("MASTER received token %li form process %d\n", token, numProcesses - 1);
 	} else {
 		MPI_Recv(&token, 1, MPI_LONG, myRank - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		printf("Process %d received token %d form process %d\n", myRank, token, myRank - 1);
+		printf("Process %d received token %li form process %d\n", myRank, token, myRank - 1);
 		
 		token *= myRank;
 		
 		MPI_Send(&token, 1, MPI_LONG, (myRank + 1) % numProcesses , 0, MPI_COMM_WORLD);
-		printf("Process %d send token %d to process %d\n", myRank, token, (myRank + 1) % numProcesses);
+		printf("Process %d send token %li to process %d\n", myRank, token, (myRank + 1) % numProcesses);
 	}
 	
 	
