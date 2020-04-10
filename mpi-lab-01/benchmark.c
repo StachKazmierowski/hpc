@@ -6,19 +6,6 @@
 #define MAX_POWER 7
 #define SAMPLE_SIZE 30
 
-int main(int argc, char * argv[]){
-int size = 1;
-double benchmark;
-for(int i = 0 ; i < MAX_POWER ; i++){
-	size *= 10;
-	for(int j = 0; j < SAMPLE_SIZE ; j++){
-		benchmark = benchmark(size, argc, argv);
-		printf("%d %d %lf\n", j, size, benchmark);
-	}
-}
-return 0;
-}
-
 double benchmark(int size, int argc, char* argv[]){
 	int token;
 	double startTime;
@@ -42,4 +29,17 @@ double benchmark(int size, int argc, char* argv[]){
 	executionTime = endTime - startTime;
    	MPI_Finalize();
 	return executionTime;
+}
+
+int main(int argc, char * argv[]){
+int size = 1;
+double benchmark;
+for(int i = 0 ; i < MAX_POWER ; i++){
+	size *= 10;
+	for(int j = 0; j < SAMPLE_SIZE ; j++){
+		benchmark = benchmark(size, argc, argv);
+		printf("%d %d %lf\n", j, size, benchmark);
+	}
+}
+return 0;
 }
