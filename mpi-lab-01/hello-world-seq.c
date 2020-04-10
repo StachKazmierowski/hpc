@@ -17,9 +17,9 @@ int main(int argc, char * argv[])
 	MPI_Comm_size(MPI_COMM_WORLD, &numProcesses);
 	MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
 
-    printf("Hello from thread number %d", myRank);
+    printf("Hello from thread number %d\n", myRank);
     if(myRank == MASTER)
-    	printf("MASTER: number of tasks is: %d", numProcesses);
+    	printf("MASTER: number of tasks is: %d\n", numProcesses);
    	MPI_Finalize();
     return 0;
 }
