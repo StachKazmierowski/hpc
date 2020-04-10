@@ -44,7 +44,7 @@ int main(int argc, char * argv[]){
 	} else {
 		for(int i = 0 ; i < max_payload ; i *= 10){
 			double benchmarkTime = benchmark(buff, partnerRank, i);
-			pritnf("%d %d %lf\n", partnerRank, i, benchmarkTime);
+			printf("%d %d %lf\n", partnerRank, i, benchmarkTime);
 		}
 	}
 	free(buff);
