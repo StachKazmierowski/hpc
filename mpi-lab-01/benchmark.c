@@ -14,6 +14,7 @@ double benchmark(int size){
 	double executionTime;
 	int numProcesses = 2;
 	int myRank;
+	MPI_Init(NULL, NULL);
 	MPI_Comm_size(MPI_COMM_WORLD, &numProcesses);
 	MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
 	
@@ -27,13 +28,13 @@ double benchmark(int size){
 	}
 	endTime = MPI_Wtime();
 	executionTime = endTime - startTime;
+	MPI_Finalize();
 	return executionTime;
 }
 
 int main(int argc, char * argv[]){
 	int size = 1;
 	double time;
-	MPI_Init(&argc, &argv);
 	for(int i = 0 ; i < MAX_POWER ; i++){
 		size *= 10;
 		for(int j = 0; j < SAMPLE_SIZE ; j++){
@@ -41,6 +42,5 @@ int main(int argc, char * argv[]){
 			printf("%d %d %lf\n", j, size, time);
 		}
 	}
-	MPI_Finalize();
 	return 0;
 }
