@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <mpi.h>
-#define MAX_PAYLOAD 10000000
+#define MAX_PAYLOAD 1000000000
 #define SAMPLE_SIZE 30
 
 double benchmark(void* buff, int to, int payload){
