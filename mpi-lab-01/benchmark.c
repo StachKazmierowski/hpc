@@ -26,7 +26,6 @@ double benchmark(int size, int argc, char* argv[]){
 	double executionTime;
 	int numProcesses = 2;
 	int myRank;
-	unsigned long token;
 	MPI_Init(&argc, &argv);
 	MPI_Comm_size(MPI_COMM_WORLD, &numProcesses);
 	MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
