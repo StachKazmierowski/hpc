@@ -61,12 +61,15 @@ Graph* createAndDistributeGraph(int numVertices, int numProcesses, int myRank) {
     			MPI_Send(graphToSend->data[firstRow + j], numVertices, MPI_INTEGER, i, 0, MPI_COMM_WORLD);
     		} 
     	}
+    	freeGraphPart(graphToSend);
+    	MPI_Barrier(MPI_COMM_WORLD);
     } else {
-    		int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank);
-    		int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank + 1);
-    		for(int j = 0; j < (lastRow - firstRow); j++){
-    			MPI_Recv(graph->data[j], numVertices, MPI_INTEGER, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-    		}
+    	int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank);
+    	int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank + 1);
+   		for(int j = 0; j < (lastRow - firstRow); j++){
+   			MPI_Recv(graph->data[j], numVertices, MPI_INTEGER, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+   		}
+   		MPI_Barrier(MPI_COMM_WORLD);
     }
     return graph;
 }
@@ -102,13 +105,15 @@ void collectAndPrintGraph(Graph* graph, int numProcesses, int myRank) {
         for (int i = 0; i < graph->numVertices; i++) {
         	printGraphRow(graph->data[i], i, graph->numVertices);
     	}
-    	
+    	MPI_Barrier(MPI_COMM_WORLD);
+    	freeGraphPart(graphToReceive);
     } else {
-    		int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank);
-    		int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank + 1);
-    		for(int j = 0; j < (lastRow - firstRow); j++){
-    			MPI_Send(graph->data[j], numVertices, MPI_INTEGER, 0, 0, MPI_COMM_WORLD);
-    		}
+    	int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank);
+    	int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank + 1);
+   		for(int j = 0; j < (lastRow - firstRow); j++){
+   			MPI_Send(graph->data[j], numVertices, MPI_INTEGER, 0, 0, MPI_COMM_WORLD);
+   		}
+   		MPI_Barrier(MPI_COMM_WORLD);
     }
 }
 
