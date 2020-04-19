@@ -64,7 +64,7 @@ Graph* createAndDistributeGraph(int numVertices, int numProcesses, int myRank) {
     	}
     	freeGraphPart(graphToSend);
     	MPI_Barrier(MPI_COMM_WORLD);
-    	std::cout << "createdAndDistributed";
+    	std::cout << "created and distributed" << std::endl;
     } else {
     	int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank);
     	int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank + 1);
@@ -83,6 +83,7 @@ void collectAndPrintGraph(Graph* graph, int numProcesses, int myRank) {
     int numVertices = graph->numVertices;
     
     if(myRank == 0){
+    	std::cout << "starting gathering" << std::endl;
     	auto graphToReceive = allocateGraphPart(numVertices, 0, numVertices);
 
     	if (graph == nullptr) {
@@ -109,6 +110,7 @@ void collectAndPrintGraph(Graph* graph, int numProcesses, int myRank) {
     	}
     	MPI_Barrier(MPI_COMM_WORLD);
     	freeGraphPart(graphToReceive);
+    	std::cout << "finishing gathering" << std::endl;
     } else {
     	int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank);
     	int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank + 1);
