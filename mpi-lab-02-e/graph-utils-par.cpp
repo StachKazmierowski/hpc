@@ -99,7 +99,7 @@ void collectAndPrintGraph(Graph* graph, int numProcesses, int myRank) {
     		}
     	}
     	
-        for (int i = 0; i < graph->numVertices; ++i) {
+        for (int i = 0; i < graph->numVertices; i++) {
         	printGraphRow(graph->data[i], i, graph->numVertices);
     	}
     	
