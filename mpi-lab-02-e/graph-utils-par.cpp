@@ -85,7 +85,7 @@ void collectAndPrintGraph(Graph* graph, int numProcesses, int myRank) {
     int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank + 1);
     int rowsNumber = lastRow - firstRow;
     
-    maxRowsNumber = (numVertices + numProcesses - 1)/numProcesses;
+    int maxRowsNumber = (numVertices + numProcesses - 1)/numProcesses;
     
     int* recv_data ;
     int* send_data ;
