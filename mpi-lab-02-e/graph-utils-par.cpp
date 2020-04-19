@@ -57,13 +57,13 @@ Graph* createAndDistributeGraph(int numVertices, int numProcesses, int myRank) {
     	for(int i = 1; i < numProcesses; i++){
     		int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, i);
     		int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, i+1);
-    		for(int j = 0; j < (lastRow - firstRow), j++){
+    		for(int j = 0; j < (lastRow - firstRow); j++){
     			MPI_Send(graphToSend->data[firstRow + j], numVertices, MPI_INTEGER, i, 0, MPI_COMM_WORLD);
     		} 
     	}
     } else {
-    		int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, i);
-    		int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, i+1);
+    		int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank);
+    		int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank + 1);
     		for(int j = 0; j < (lastRow - firstRow); j++){
     			MPI_Recv(graph->data[j], numVertices, MPI_INTEGER, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     		}
@@ -75,6 +75,7 @@ void collectAndPrintGraph(Graph* graph, int numProcesses, int myRank) {
     assert(numProcesses >= 1 && myRank >= 0 && myRank < numProcesses);
     assert(graph->numVertices > 0);
     assert(graph->firstRowIdxIncl >= 0 && graph->lastRowIdxExcl <= graph->numVertices);
+    int numVertices = graph->numVertices;
     
     if(myRank == 0){
     	auto graphToReceive = allocateGraphPart(numVertices, 0, numVertices);
@@ -103,8 +104,8 @@ void collectAndPrintGraph(Graph* graph, int numProcesses, int myRank) {
     	}
     	
     } else {
-    		int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, i);
-    		int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, i+1);
+    		int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank);
+    		int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank + 1);
     		for(int j = 0; j < (lastRow - firstRow); j++){
     			MPI_Send(graph->data[j], numVertices, MPI_INTEGER, 0, 0, MPI_COMM_WORLD);
     		}
