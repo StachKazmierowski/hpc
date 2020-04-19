@@ -81,8 +81,9 @@ void collectAndPrintGraph(Graph* graph, int numProcesses, int myRank) {
     assert(graph->numVertices > 0);
     assert(graph->firstRowIdxIncl >= 0 && graph->lastRowIdxExcl <= graph->numVertices);
     int numVertices = graph->numVertices;
-    int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, i);
-    int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, i+1);
+    int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank);
+    int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank + 1);
+    int rowsNumber = lastRow - firstRow;
     
     maxRowsNumber = (numVertices + numProcesses - 1)/numProcesses;
     
@@ -91,30 +92,34 @@ void collectAndPrintGraph(Graph* graph, int numProcesses, int myRank) {
 
     send_data = new int[numVertices*maxRowsNumber];
     
-    for(int i=0; i<rows; i++){
+    for(int i=0; i<rowsNumber; i++){
         for(int j=0; j < numVertices; j++){
             send_data[i*numVertices + j] = graph->data[i][j];
         }
     }
     
     if(myRank == 0){
-        recv_data = new int[numVertices*rowsInOne*numProcesses];
+        recv_data = new int[numVertices*maxRowsNumber*numProcesses];
     }
     
     MPI_Gather(
             send_data,
-            numVertices*rowsInOne,
+            numVertices*maxRowsNumber,
             MPI_INT,
             recv_data,
-            numVertices*rowsInOne,
+            numVertices*maxRowsNumber,
             MPI_INT,
             0,
             MPI_COMM_WORLD);
     
     if(myRank == 0){
-        for(int i=0; i<graph->numVertices; i++){
-            printGraphRow(recv_data + (i*numVertices),0, numVertices );
-        }
+    	for(int i = 0; i < numProcesses; i++){
+    		int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, i);
+    		int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, i + 1);
+   			for(int j = 0; j < (lastRow - firstRow); j++){
+            	printGraphRow(recv_data + (i*numVertices*maxRowsNumber),0, numVertices );
+   			}
+   		}
         delete[] recv_data;
     }
 
