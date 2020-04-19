@@ -81,7 +81,45 @@ void collectAndPrintGraph(Graph* graph, int numProcesses, int myRank) {
     assert(graph->numVertices > 0);
     assert(graph->firstRowIdxIncl >= 0 && graph->lastRowIdxExcl <= graph->numVertices);
     int numVertices = graph->numVertices;
+    int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, i);
+    int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, i+1);
     
+    maxRowsNumber = (numVertices + numProcesses - 1)/numProcesses;
+    
+    int* recv_data ;
+    int* send_data ;
+
+    send_data = new int[numVertices*maxRowsNumber];
+    
+    for(int i=0; i<rows; i++){
+        for(int j=0; j < numVertices; j++){
+            send_data[i*numVertices + j] = graph->data[i][j];
+        }
+    }
+    
+    if(myRank == 0){
+        recv_data = new int[numVertices*rowsInOne*numProcesses];
+    }
+    
+    MPI_Gather(
+            send_data,
+            numVertices*rowsInOne,
+            MPI_INT,
+            recv_data,
+            numVertices*rowsInOne,
+            MPI_INT,
+            0,
+            MPI_COMM_WORLD);
+    
+    if(myRank == 0){
+        for(int i=0; i<graph->numVertices; i++){
+            printGraphRow(recv_data + (i*numVertices),0, numVertices );
+        }
+        delete[] recv_data;
+    }
+
+    delete[] send_data;
+    /*
     if(myRank == 0){
     	std::cout << "starting gathering" << std::endl;
     	auto graphToReceive = allocateGraphPart(numVertices, 0, numVertices);
@@ -110,7 +148,7 @@ void collectAndPrintGraph(Graph* graph, int numProcesses, int myRank) {
     	}
     	MPI_Barrier(MPI_COMM_WORLD);
     	freeGraphPart(graphToReceive);
-    	std::cout << "finishing gathering" << std::endl;
+    	std::cout << "fi gathering" << std::endl;
     } else {
     	int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank);
     	int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank + 1);
@@ -119,6 +157,7 @@ void collectAndPrintGraph(Graph* graph, int numProcesses, int myRank) {
    		}
    		MPI_Barrier(MPI_COMM_WORLD);
     }
+    */
 }
 
 void destroyGraph(Graph* graph, int numProcesses, int myRank) {
