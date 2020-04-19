@@ -84,8 +84,8 @@ void collectAndPrintGraph(Graph* graph, int numProcesses, int myRank) {
     	    return;
     	}
 
-    	assert(graph->numVertices > 0 && graph->numVertices == numVertices);
-    	assert(graph->firstRowIdxIncl == 0 && graph->lastRowIdxExcl == graph->numVertices);
+    	assert(graphToReceive->numVertices > 0 && graphToReceive->numVertices == numVertices);
+    	assert(graphToReceive->firstRowIdxIncl == 0 && graphToReceive->lastRowIdxExcl == graphToReceive->numVertices);
     	
     	for(int i = 0; i < getFirstGraphRowOfProcess(numVertices, numProcesses, myRank + 1); i++){
    			graphToReceive->data[i] = graph->data[i];
