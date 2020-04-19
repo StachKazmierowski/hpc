@@ -4,6 +4,7 @@
  * Refactoring 2019, Łukasz Rączkowski
  */
 
+#include <iostream>
 #include <cassert>
 #include <mpi.h>
 #include "graph-base.h"
@@ -63,6 +64,7 @@ Graph* createAndDistributeGraph(int numVertices, int numProcesses, int myRank) {
     	}
     	freeGraphPart(graphToSend);
     	MPI_Barrier(MPI_COMM_WORLD);
+    	std::cout << "createdAndDistributed";
     } else {
     	int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank);
     	int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank + 1);
