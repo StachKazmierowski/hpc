@@ -38,12 +38,12 @@ Graph* createAndDistributeGraph(int numVertices, int numProcesses, int myRank) {
     if(myRank == 0){
     	auto graphToSend = allocateGraphPart(numVertices, 0, numVertices);
 
-    	if (graph == nullptr) {
+    	if (graphToSend == nullptr) {
     	    return nullptr;
     	}
 
-    	assert(graph->numVertices > 0 && graph->numVertices == numVertices);
-    	assert(graph->firstRowIdxIncl == 0 && graph->lastRowIdxExcl == graph->numVertices);
+    	assert(graphToSend->numVertices > 0 && graphToSend->numVertices == numVertices);
+    	assert(graphToSend->firstRowIdxIncl == 0 && graphToSend->lastRowIdxExcl == graphToSend->numVertices);
 
     	for (int i = 0; i < graph->numVertices; ++i) {
     	    initializeGraphRow(graphToSend->data[i], i, graphToSend->numVertices);
