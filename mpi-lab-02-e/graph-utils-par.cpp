@@ -116,7 +116,7 @@ void collectAndPrintGraph(Graph* graph, int numProcesses, int myRank) {
     		int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, i);
     		int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, i + 1);
    			for(int j = 0; j < (lastRow - firstRow); j++){
-            	printGraphRow(recv_data + (i*numVertices*maxRowsNumber),0, numVertices );
+            	printGraphRow(recv_data + numVertices * (i * maxRowsNumber + j),0, numVertices );
    			}
    		}
         delete[] recv_data;
