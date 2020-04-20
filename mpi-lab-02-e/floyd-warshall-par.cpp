@@ -11,17 +11,6 @@
 #include "graph-base.h"
 #include "graph-utils.h"
 
-int getFirstGraphRowOfProcess(int numVertices, int numProcesses, int myRank) {
-	int perProcess = numVertices / numProcesses;
-	int unevenNumber = numVertices - perProcess * numProcesses;
-	if(unevenNumber >= myRank){
-		return myRank * perProcess + myRank;
-	} else {
-		return myRank * perProcess + unevenNumber;
-	}
-}
-
-
 static void runFloydWarshallParallel(Graph* graph, int numProcesses, int myRank) {
     assert(numProcesses <= graph->numVertices);
     
