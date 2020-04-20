@@ -15,14 +15,11 @@ static void runFloydWarshallParallel(Graph* graph, int numProcesses, int myRank)
     assert(numProcesses <= graph->numVertices);
     
     
-    int numVertices = graph->numVertices
+    int numVertices = graph->numVertices;
     int myRowsNumber = graph->lastRowIdxExcl - graph->firstRowIdxIncl;
     int senderRank = 0;
     
     for (int k = 0; k < numVertices; k++) {
-    	if(getFirstGraphRowOfProcess(numVertices, numProcesses, senderRank + 1) <= k){
-    		senderRank++;
-    	}
     	int start = getFirstGraphRowOfProcess(numVertices, numProcesses, senderRank);
     	int end = getFirstGraphRowOfProcess(numVertices, numProcesses, senderRank + 1);
     	
@@ -50,6 +47,9 @@ static void runFloydWarshallParallel(Graph* graph, int numProcesses, int myRank)
         }
         
         MPI_Wait(&request, MPI_STATUS_IGNORE);
+        if(k == (end - 1)){
+        	senderRank++;
+        }
     }
 }
 
