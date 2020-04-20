@@ -11,11 +11,59 @@
 #include "graph-base.h"
 #include "graph-utils.h"
 
+int getFirstGraphRowOfProcess(int numVertices, int numProcesses, int myRank) {
+	int perProcess = numVertices / numProcesses;
+	int unevenNumber = numVertices - perProcess * numProcesses;
+	if(unevenNumber >= myRank){
+		return myRank * perProcess + myRank;
+	} else {
+		return myRank * perProcess + unevenNumber;
+	}
+}
+
 
 static void runFloydWarshallParallel(Graph* graph, int numProcesses, int myRank) {
     assert(numProcesses <= graph->numVertices);
+    
+    
+    int numVertices = graph->numVertices;
+    int start = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank);
+    int end = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank + 1);
+    int rowsNumber = end - start
+    int senderRank = 0;
+    
+    for (int k = 0; k < numVertices; k++) {
+    	if(getFirstGraphRowOfProcess(numVertices, numProcesses, senderRank + ) <= k){
+    		senderRank++;
+    	}
+    	if(start <= k && k < end){
+    		for(int i = 0; i < numProcesses; i++){
+    			MPI_Send(graphToSend->data[k], numVertices, MPI_INTEGER, i, myRank, MPI_COMM_WORLD);
+    		}
+    	}    	
+    	MPI_Recv(graph->extraRow, numVertices, MPI_INTEGER, senderRank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    	for (int i = 0; i < rowsNumber; i++) {
+            for (int j = 0; j < m; j++) {
+                int pathSum = graph->data[i][k] + graph->data[k][j];
 
-    /* FIXME: implement */
+                if (graph->data[i][j] > pathSum) {
+                    graph->data[i][j] = pathSum;
+                }
+            }
+        }
+    	MPI_Barrier(MPI_COMM_WORLD);
+    }
+    /*
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < m; ++j) {
+                int pathSum = graph->data[i][k] + graph->data[k][j];
+
+                if (graph->data[i][j] > pathSum) {
+                    graph->data[i][j] = pathSum;
+                }
+            }
+        }
+    */
 }
 
 

@@ -123,45 +123,6 @@ void collectAndPrintGraph(Graph* graph, int numProcesses, int myRank) {
     }
 
     delete[] send_data;
-    /*
-    if(myRank == 0){
-    	std::cout << "starting gathering" << std::endl;
-    	auto graphToReceive = allocateGraphPart(numVertices, 0, numVertices);
-
-    	if (graph == nullptr) {
-    	    return;
-    	}
-
-    	assert(graphToReceive->numVertices > 0 && graphToReceive->numVertices == numVertices);
-    	assert(graphToReceive->firstRowIdxIncl == 0 && graphToReceive->lastRowIdxExcl == graphToReceive->numVertices);
-    	
-    	for(int i = 0; i < getFirstGraphRowOfProcess(numVertices, numProcesses, myRank + 1); i++){
-   			graphToReceive->data[i] = graph->data[i];
-    	}
-    	
-    	for(int i = 1; i < numProcesses; i++){
-    		int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, i);
-    		int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, i+1);
-    		for(int j = 0; j < (lastRow - firstRow); j++){
-    			MPI_Recv(graphToReceive->data[firstRow + j], numVertices, MPI_INTEGER, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-    		}
-    	}
-    	
-        for (int i = 0; i < graph->numVertices; i++) {
-        	printGraphRow(graph->data[i], i, graph->numVertices);
-    	}
-    	MPI_Barrier(MPI_COMM_WORLD);
-    	freeGraphPart(graphToReceive);
-    	std::cout << "fi gathering" << std::endl;
-    } else {
-    	int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank);
-    	int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank + 1);
-   		for(int j = 0; j < (lastRow - firstRow); j++){
-   			MPI_Send(graph->data[j], numVertices, MPI_INTEGER, 0, 0, MPI_COMM_WORLD);
-   		}
-   		MPI_Barrier(MPI_COMM_WORLD);
-    }
-    */
 }
 
 void destroyGraph(Graph* graph, int numProcesses, int myRank) {
