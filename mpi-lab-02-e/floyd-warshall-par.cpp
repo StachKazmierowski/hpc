@@ -28,14 +28,14 @@ static void runFloydWarshallParallel(Graph* graph, int numProcesses, int myRank)
     	
     	if(senderRank == myRank){
     		for(int i = 0; i < numVertices; i++){
-    			graph->extraRow[i] = data[k - start][i];
+    			graph->extraRow[i] = graph->data[k - start][i];
     		}
     	}
     	
     	MPI_Request request;
     	MPI_Ibarrier(MPI_COMM_WORLD, &request);
     	
-    	MPI_Bcast(grapth->extraRow, graph->numVertices, MPI_INT, senderRank, MPI_COMM_WORLD);
+    	MPI_Bcast(graph->extraRow, graph->numVertices, MPI_INT, senderRank, MPI_COMM_WORLD);
     	
     	
     	for (int i = 0; i < rowsNumber; i++) {
