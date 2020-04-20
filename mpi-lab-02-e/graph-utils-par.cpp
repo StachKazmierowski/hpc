@@ -64,7 +64,6 @@ Graph* createAndDistributeGraph(int numVertices, int numProcesses, int myRank) {
     	}
     	freeGraphPart(graphToSend);
     	MPI_Barrier(MPI_COMM_WORLD);
-    	std::cout << "created and distributed" << std::endl;
     } else {
     	int firstRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank);
     	int lastRow = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank + 1);
