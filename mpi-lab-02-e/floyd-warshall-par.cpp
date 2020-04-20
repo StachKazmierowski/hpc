@@ -25,13 +25,19 @@ static void runFloydWarshallParallel(Graph* graph, int numProcesses, int myRank)
     	if(getFirstGraphRowOfProcess(numVertices, numProcesses, senderRank + 1) <= k){
     		senderRank++;
     	}
-    	if(start <= k && k < end){
-    		int kIndexInMySubgraph = k - start;
-    		for(int i = 0; i < numProcesses; i++){
-    			MPI_Send(graph->data[kIndexInMySubgraph], numVertices, MPI_INTEGER, i, myRank, MPI_COMM_WORLD);
+    	
+    	if(senderRank == myRank){
+    		for(int i = 0; i < numVertices; i++){
+    			graph->extraRow[i] = data[k - start][i];
     		}
-    	}    	
-    	MPI_Recv(graph->extraRow, numVertices, MPI_INTEGER, senderRank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    	}
+    	
+    	MPI_Request request;
+    	MPI_Ibarrier(MPI_COMM_WORLD, &request);
+    	
+    	MPI_Bcast(grapth->extraRow, graph->numVertices, MPI_INT, senderRank, MPI_COMM_WORLD);
+    	
+    	
     	for (int i = 0; i < rowsNumber; i++) {
             for (int j = 0; j < numVertices; j++) {
                 int pathSum = graph->data[i][k] + graph->data[k][j];
@@ -41,7 +47,8 @@ static void runFloydWarshallParallel(Graph* graph, int numProcesses, int myRank)
                 }
             }
         }
-    	MPI_Barrier(MPI_COMM_WORLD);
+        
+        MPI_Wait(&request, MPI_STATUS_IGNORE);
     }
     /*
         for (int i = 0; i < m; ++i) {
