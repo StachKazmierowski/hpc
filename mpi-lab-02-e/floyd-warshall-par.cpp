@@ -15,16 +15,16 @@ static void runFloydWarshallParallel(Graph* graph, int numProcesses, int myRank)
     assert(numProcesses <= graph->numVertices);
     
     
-    int numVertices = graph->numVertices;
-    int start = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank);
-    int end = getFirstGraphRowOfProcess(numVertices, numProcesses, myRank + 1);
-    int rowsNumber = end - start;
+    int numVertices = graph->numVertices
+    int myRowsNumber = graph->lastRowIdxExcl - graph->firstRowIdxIncl;
     int senderRank = 0;
     
     for (int k = 0; k < numVertices; k++) {
     	if(getFirstGraphRowOfProcess(numVertices, numProcesses, senderRank + 1) <= k){
     		senderRank++;
     	}
+    	int start = getFirstGraphRowOfProcess(numVertices, numProcesses, senderRank);
+    	int end = getFirstGraphRowOfProcess(numVertices, numProcesses, senderRank + 1);
     	
     	if(senderRank == myRank){
     		std::cout << myRank << std::endl;
@@ -39,7 +39,7 @@ static void runFloydWarshallParallel(Graph* graph, int numProcesses, int myRank)
     	MPI_Bcast(graph->extraRow, graph->numVertices, MPI_INT, senderRank, MPI_COMM_WORLD);
     	
     	
-    	for (int i = 0; i < rowsNumber; i++) {
+    	for (int i = 0; i < myRowsNumber; i++) {
             for (int j = 0; j < numVertices; j++) {
                 int pathSum = graph->data[i][k] + graph->extraRow[j];
 
