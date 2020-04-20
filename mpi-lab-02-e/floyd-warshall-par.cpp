@@ -27,6 +27,7 @@ static void runFloydWarshallParallel(Graph* graph, int numProcesses, int myRank)
     	}
     	
     	if(senderRank == myRank){
+    		std::out << myRank << std::endl;
     		for(int i = 0; i < numVertices; i++){
     			graph->extraRow[i] = graph->data[k - start][i];
     		}
@@ -40,7 +41,7 @@ static void runFloydWarshallParallel(Graph* graph, int numProcesses, int myRank)
     	
     	for (int i = 0; i < rowsNumber; i++) {
             for (int j = 0; j < numVertices; j++) {
-                int pathSum = graph->data[i][k] + graph->data[k][j];
+                int pathSum = graph->data[i][k] + graph->extraRow[j];
 
                 if (graph->data[i][j] > pathSum) {
                     graph->data[i][j] = pathSum;
@@ -50,17 +51,6 @@ static void runFloydWarshallParallel(Graph* graph, int numProcesses, int myRank)
         
         MPI_Wait(&request, MPI_STATUS_IGNORE);
     }
-    /*
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < m; ++j) {
-                int pathSum = graph->data[i][k] + graph->data[k][j];
-
-                if (graph->data[i][j] > pathSum) {
-                    graph->data[i][j] = pathSum;
-                }
-            }
-        }
-    */
 }
 
 
