@@ -24,7 +24,6 @@ static void runFloydWarshallParallel(Graph* graph, int numProcesses, int myRank)
     	int end = getFirstGraphRowOfProcess(numVertices, numProcesses, senderRank + 1);
     	
     	if(senderRank == myRank){
-    		std::cout << myRank << std::endl;
     		for(int i = 0; i < numVertices; i++){
     			graph->extraRow[i] = graph->data[k - start][i];
     		}
