@@ -90,9 +90,7 @@ int main(int argc, char *argv[]) {
     if (showResults) {
         collectAndPrintGraph(graph, 1 /* numProcesses */, 0 /* myRank */);
     }
-    if(myRank == 0){
-    	std::cout << i << " " << endTime - startTime << std::endl;
-    }
+   	std::cout << i << " " << endTime - startTime << std::endl;
     
 
     destroyGraph(graph, 1 /* numProcesses */, 0 /* myRank */);
