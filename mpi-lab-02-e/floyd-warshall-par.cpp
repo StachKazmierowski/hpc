@@ -123,9 +123,9 @@ int main(int argc, char *argv[]) {
             << std::endl;
             
     if(myRank == 0){
+    	std::cout << i << " " << endTime - startTime << std::endl;
+    }
     
-    std::cout << i << " " << endTime - startTime << std::endl;
-
     if (showResults) {
         collectAndPrintGraph(graph, numProcesses, myRank);
     }
