@@ -77,6 +77,8 @@ int main(int argc, char *argv[]) {
         }
     }
 
+
+	for(int i = 400 ; i < 5001; i += 46){
     if (numVertices <= 0) {
         std::cerr << "Usage: " << argv[0] << "  [--show-results] <num_vertices>" << std::endl;
         MPI_Finalize();
@@ -91,7 +93,7 @@ int main(int argc, char *argv[]) {
             return 0;
         }
     }
-
+    
     std::cerr << "Running the Floyd-Warshall algorithm for a graph with " << numVertices << " vertices." << std::endl;
 
     auto graph = createAndDistributeGraph(numVertices, numProcesses, myRank);
@@ -119,13 +121,17 @@ int main(int argc, char *argv[]) {
             << " process(es): "
             << endTime - startTime
             << std::endl;
+            
+    if(myRank == 0){
+    
+    std::cout << i << " " << endTime - startTime << std::endl;
 
     if (showResults) {
         collectAndPrintGraph(graph, numProcesses, myRank);
     }
 
     destroyGraph(graph, numProcesses, myRank);
-
+    }
     MPI_Finalize();
 
     return 0;
