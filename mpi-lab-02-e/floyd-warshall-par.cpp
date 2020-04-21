@@ -79,6 +79,7 @@ int main(int argc, char *argv[]) {
 
 
 	for(int i = 400 ; i < 5001; i += 46){
+	numVertices = i;
     if (numVertices <= 0) {
         std::cerr << "Usage: " << argv[0] << "  [--show-results] <num_vertices>" << std::endl;
         MPI_Finalize();
