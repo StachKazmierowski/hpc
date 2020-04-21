@@ -52,14 +52,12 @@ Graph* createAndDistributeGraph(int numVertices, int numProcesses, int myRank) {
                 initializeGraphRow(graph->data[i], i, graph->numVertices);
             } else {
                 initializeGraphRow(row, i, numVertices);
-//                MPI_Request request;
                 MPI_Send(row,
                         numVertices,
                         MPI_INT,
                         recipientRank,
                         0,
                         MPI_COMM_WORLD
-//                        ,&request
                         );
             }
             if(i == partEnd){
@@ -68,7 +66,6 @@ Graph* createAndDistributeGraph(int numVertices, int numProcesses, int myRank) {
                 partEnd = getFirstGraphRowOfProcess(numVertices, numProcesses, recipientRank + 1) - 1;
             }
         }
-//    	freeGraphPart(graphToSend);
     	MPI_Barrier(MPI_COMM_WORLD);
     	delete[] row;
     } else {
@@ -125,9 +122,8 @@ void collectAndPrintGraph(Graph* graph, int numProcesses, int myRank) {
             	printGraphRow(recv_data + numVertices * (i * maxRowsNumber + j),0, numVertices );
    			}
    		}
-        delete[] recv_data;
-    }
-
+    	delete[] recv_data;
+    } 
     delete[] send_data;
 }
 
