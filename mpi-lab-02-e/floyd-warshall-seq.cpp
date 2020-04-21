@@ -51,6 +51,8 @@ int main(int argc, char *argv[]) {
         }
     }
 
+	for(int i = 400 ; i < 5001; i += 200){
+	numVertices = i;
     if (numVertices <= 0) {
         std::cerr << "Usage: " << argv[0] << "  [--show-results] <num_vertices>" << std::endl;
         MPI_Finalize();
@@ -88,9 +90,13 @@ int main(int argc, char *argv[]) {
     if (showResults) {
         collectAndPrintGraph(graph, 1 /* numProcesses */, 0 /* myRank */);
     }
+    if(myRank == 0){
+    	std::cout << i << " " << endTime - startTime << std::endl;
+    }
+    
 
     destroyGraph(graph, 1 /* numProcesses */, 0 /* myRank */);
-
+    }
     MPI_Finalize();
 
     return 0;
