@@ -218,14 +218,14 @@ int main(int argc, char *argv[]) {
               << epsilon
               << std::endl;
     std::cout << i << " " << duration << " " << epsilon << std::endl;
-              
-    }
-
     if (isVerbose) {
         gridFragment->printEntireGrid(myRank, numProcesses);
     }
 
-    gridFragment->free();
+    gridFragment->free();   
+    }
+
+
     MPI_Finalize();
     return 0;
 }
