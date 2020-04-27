@@ -162,8 +162,12 @@ int main(int argc, char * argv[]) {
         return inputOptions.getErrorCode();
     }
 
-    auto numPointsPerDimension = inputOptions.getNumPointsPerDimension();
     auto isVerbose = inputOptions.isVerbose();
+    
+    for(int i = 100; i < 2000; i += 100){
+
+    auto numPointsPerDimension = i;
+
 
     double omega = Utils::getRelaxationFactor(numPointsPerDimension);
     double epsilon = Utils::getToleranceValue(numPointsPerDimension);
@@ -209,12 +213,13 @@ int main(int argc, char * argv[]) {
             << " epsilon="
             << epsilon
             << std::endl;
-
+    std::cout << i << " " << duration << " " << epsilon << std::endl;
 
     if (isVerbose) {
         printPoints(pointsPointer, numPointsPerDimension);
     }
 
     freePoints(pointsPointer, numPointsPerDimension);
+    }
     return 0;
 }
