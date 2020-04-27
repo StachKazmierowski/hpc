@@ -67,6 +67,19 @@ static InputOptions parseInput(int argc, char * argv[], int numProcesses) {
     return {numPointsPerDimension, verbose, errorCode};
 }
 
+static void sendRecv(int myRank, int numProcesses, double* buffFrom, double* buffTo, int buffSize, bool clockwise, MPI_Request* reqs){
+    int rankFrom, rankTo;
+    if(clockwise){
+        rankTo = (myRank + 1) % numProcesses;
+        rankFrom = myRank == 0 ? numProcesses - 1 : myRank - 1;
+    } else {
+        rankFrom = (myRank + 1) % numProcesses;
+        rankTo = myRank == 0 ? numProcesses - 1 : myRank - 1;
+    }
+    MPI_Isend(buffFrom, buffSize, MPI_DOUBLE, rankTo, clockwise, MPI_COMM_WORLD, reqs);
+    MPI_Irecv(buffTo, buffSize, MPI_DOUBLE, rankFrom, clockwise, MPI_COMM_WORLD, reqs + 1);
+}
+
 static std::tuple<int, double> performAlgorithm(int myRank, int numProcesses, GridFragment *frag, double omega, double epsilon) {
     int startRowIncl = frag->firstRowIdxIncl + (myRank == 0 ? 1 : 0);
     int endRowExcl = frag->lastRowIdxExcl - (myRank == numProcesses - 1 ? 1 : 0);
@@ -79,10 +92,29 @@ static std::tuple<int, double> performAlgorithm(int myRank, int numProcesses, Gr
     /* and computation of the grid */
     /* the following code just recomputes the appropriate grid fragment */
     /* but does not communicate the partial results */
+    
+    
+    auto reqs = new MPI_Request[4];
+    
+    
     do {
         maxDiff = 0.0;
 
         for (int color = 0; color < 2; ++color) {
+        	
+        	int otherColor = (color + 1) % 2;
+        	int rowsNumber = frag->lastRowIdxExcl - frag->firstRowIdxIncl;
+        	double* sharedRowTop = frag->data[otherColor][0];
+        	double* myRowTop = frag->data[otherColor][1];
+        	double* myRowBottom = frag->data[otherColor][rowsNumber];
+        	double* sharedRowBottom = frag->data[otherColor][rowsNumber + 1];
+        	
+        	int buffSize = (frag->gridDimension +1) / 2;
+        	sendRecv(myRank, numProcesses, myRowTop, sharedRowTop, buffSize, false, reqs);
+        	sendRecv(myRank, numProcesses, myRowBottom, sharedRowBottom, buffSize, true, reqs + 2);
+        	
+        	
+        	
             for (int rowIdx = startRowIncl; rowIdx < endRowExcl; ++rowIdx) {
                 for (int colIdx = 1 + (rowIdx % 2 == color ? 1 : 0); colIdx < frag->gridDimension - 1; colIdx += 2) {
                     double tmp =
@@ -100,11 +132,25 @@ static std::tuple<int, double> performAlgorithm(int myRank, int numProcesses, Gr
                     }
                 }
             }
+            MPI_Waitall(4, reqs, MPI_STATUSES_IGNORE);
         }
 
         ++numIterations;
-    } while (maxDiff > epsilon);
+        double globalMaxDiff = maxDiff;
 
+        MPI_Allreduce(
+                &maxDiff,
+                &globalMaxDiff,
+                1,
+                MPI_DOUBLE,
+                MPI_MAX,
+                MPI_COMM_WORLD);
+
+
+        maxDiff = globalMaxDiff;
+    } while (maxDiff > epsilon);
+    
+    delete[] reqs;
     /* no code changes beyond this point should be needed */
 
     return std::make_tuple(numIterations, maxDiff);
