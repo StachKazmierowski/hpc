@@ -171,8 +171,10 @@ int main(int argc, char *argv[]) {
     if (inputOptions.getErrorCode() != 0) {
         return inputOptions.getErrorCode();
     }
+    
+    for(int i = 100; i < 2000; i += 100){
 
-    auto numPointsPerDimension = inputOptions.getNumPointsPerDimension();
+    auto numPointsPerDimension = i;
     auto isVerbose = inputOptions.isVerbose();
 
     double omega = Utils::getRelaxationFactor(numPointsPerDimension);
@@ -215,6 +217,9 @@ int main(int argc, char *argv[]) {
               << " epsilon="
               << epsilon
               << std::endl;
+    std::cout << i << " " << duration << " " << epsilon << std:endl;
+              
+    }
 
     if (isVerbose) {
         gridFragment->printEntireGrid(myRank, numProcesses);
