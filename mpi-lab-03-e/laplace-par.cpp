@@ -171,11 +171,11 @@ int main(int argc, char *argv[]) {
     if (inputOptions.getErrorCode() != 0) {
         return inputOptions.getErrorCode();
     }
+    auto isVerbose = inputOptions.isVerbose();
     
     for(int i = 100; i < 2000; i += 100){
 
     auto numPointsPerDimension = i;
-    auto isVerbose = inputOptions.isVerbose();
 
     double omega = Utils::getRelaxationFactor(numPointsPerDimension);
     double epsilon = Utils::getToleranceValue(numPointsPerDimension);
@@ -217,7 +217,7 @@ int main(int argc, char *argv[]) {
               << " epsilon="
               << epsilon
               << std::endl;
-    std::cout << i << " " << duration << " " << epsilon << std:endl;
+    std::cout << i << " " << duration << " " << epsilon << std::endl;
               
     }
 
