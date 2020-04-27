@@ -206,7 +206,7 @@ int main(int argc, char *argv[]) {
     double duration =
             ((double) endTime.tv_sec + ((double) endTime.tv_usec / 1000000.0)) -
             ((double) startTime.tv_sec + ((double) startTime.tv_usec / 1000000.0));
-
+    if(myRank == 0){
     std::cerr << "Statistics: duration(s)="
               << std::fixed
               << std::setprecision(10)
@@ -218,6 +218,7 @@ int main(int argc, char *argv[]) {
               << epsilon
               << std::endl;
     std::cout << i << " " << duration << " " << epsilon << std::endl;
+    }
     if (isVerbose) {
         gridFragment->printEntireGrid(myRank, numProcesses);
     }
