@@ -173,7 +173,7 @@ int main(int argc, char *argv[]) {
     }
     auto isVerbose = inputOptions.isVerbose();
     
-    for(int i = 100; i < 2000; i += 100){
+    for(int i = 100; i < 10000; i += 100){
 
     auto numPointsPerDimension = i;
 
