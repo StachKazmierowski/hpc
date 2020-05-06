@@ -7,6 +7,16 @@
 #include <random>
 #include <chrono>
 
+void matrixMultiplication(double* A, double* B, double*C, int n){
+	for(int i = 0; i < n; i ++){
+		for(int j = 0; j < n; j++){
+			for(int k = 0; k < n; k++){
+				C[i*n + j] += A[i*n + k] * B[k*n + j];
+			}
+		}
+	}
+}
+
 int main(int argc, char* argv[]) {
     if (argc < 2) {
         std::cerr << "invocation: " <<argv[0]<<" matrix_size " << std::endl;
@@ -43,12 +53,4 @@ int main(int argc, char* argv[]) {
 }
 
 
-void matrixMultiplication(double* A, double* B, double*C, int n){
-	for(int i = 0; i < n; i ++){
-		for(int j = 0; j < n; j++){
-			for(int k = 0; k < n; k++){
-				C[i*n + j] += A[i*n + k] * B[k*n + j];
-			}
-		}
-	}
-}
+
