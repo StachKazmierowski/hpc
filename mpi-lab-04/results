@@ -1,0 +1,27 @@
+
+
+
+100:
+Statistics: duration(s)=0.2505240440 #iters=1960 diff=0.0000327851 epsilon=0.0000328362
+200:
+Statistics: duration(s)=2.6806709766 #iters=5224 diff=0.0000646303 epsilon=0.0000646646
+300:
+Statistics: duration(s)=9.1884930134 #iters=8674 diff=0.0000964710 epsilon=0.0000964947
+
+
+1000:
+Statistics: duration(s)=107.6753699780 #iters=9434 diff=0.0003192776 epsilon=0.0003193104
+
+-ffp=4
+
+100:
+Statistics: duration(s)=0.2289521694 #iters=1960 diff=0.0000327851 epsilon=0.0000328362
+200:
+Statistics: duration(s)=2.4364321232 #iters=5224 diff=0.0000646303 epsilon=0.0000646646
+300:
+Statistics: duration(s)=8.8825690746 #iters=8674 diff=0.0000964710 epsilon=0.0000964947
+
+1000:
+Statistics: duration(s)=107.3907690048 #iters=9434 diff=0.0003192776 epsilon=0.0003193104
+
+
