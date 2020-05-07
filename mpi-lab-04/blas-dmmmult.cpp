@@ -6,16 +6,21 @@
 #include <iostream> // HPC can into CPP!
 #include <random>
 #include <chrono>
+#include <omp.h>
 
 void matrixMultiplication(double* A, double* B, double*C, int n){
-	for(int i = 0; i < n; i ++){
-		for(int j = 0; j < n; j++){
-			for(int k = 0; k < n; k++){
+#pragma omp parallel shared(a,b,c) private(i,j,k) 
+   {
+#pragma omp for  schedule(static)
+	for (i=0; i<m; i=i+1){
+		for (j=0; j<n; j=j+1){
+         	for (k=0; k<p; k=k+1){
 				C[i*n + j] += A[i*n + k] * B[k*n + j];
-			}
-		}
-	}
+         	}
+      	}
+   	}
 }
+}	
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
